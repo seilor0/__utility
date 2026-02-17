@@ -1,0 +1,268 @@
+@layer default {
+  /* ---------------------- */
+  /*          basic         */
+  label:has(:checked)   .not-checked {display: none;}
+  label:not(:has(:checked)) .checked {display: none;}
+  /* ---------------------- */
+  
+  
+  /* ---------------------- */
+  /*          icon          */
+  .icon-frame {
+    cursor: pointer;
+    width: max-content;
+    height: max-content;
+  }
+  
+  .icon {
+    --size: 1rem;
+    --line-radius: 2px;
+  
+    aspect-ratio: 1;
+    width: var(--size);
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+  
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      background-color: currentColor;
+      border-radius: var(--line-radius);
+    }
+  }
+  
+  .icon-plus {
+    &::before,&::after {
+      height: var(--size);
+      width: calc(2 * var(--line-radius));
+      translate: calc(-1 * var(--line-radius));
+    }
+    &::after {rotate: 90deg;}
+  }
+  
+  .icon-minus::before {
+    height: calc(2*var(--line-radius));
+    width: var(--size);
+    translate: calc(-0.5 * var(--size)) calc(0.5 * var(--size) - var(--line-radius));
+  }
+  
+  .icon-close {
+    &::before,&::after {
+      height: calc(1.4*var(--size));
+      width:  calc(2*var(--line-radius));
+      translate: calc(-1 * var(--line-radius)) calc(-0.2 * var(--size));
+    }
+    &::before {rotate: 45deg;}
+    &::after {rotate: -45deg;}
+  }
+  
+  /* デフォルト上向き */
+  .icon-arrow {
+    transition: rotate 0.2s;
+    &::before, &::after {
+      height: calc(var(--size) * 0.7);
+      width:  calc(var(--line-radius) * 2);
+      transform-origin: var(--line-radius) var(--line-radius);
+      translate: calc(-1 * var(--line-radius)) calc(0.2 * var(--size));
+    }
+    &::before {rotate: 45deg;}
+    &::after {rotate: -45deg;}
+  }
+  /* ---------------------- */
+  
+  
+  /* ---------------------- */
+  /*       select-tag       */
+  .select-tag {
+    --fill-color: gray;
+    --line-color: hsl(from var(--fill-color) h s calc(l - 17));
+    --def-color:  hsl(from var(--fill-color) h s calc(l - 7));
+    
+    color: var(--def-color);
+    background-color: transparent;
+    border: 1px solid var(--def-color);
+    
+    font-size: calc(1em - 1px);
+    font-weight: 500;
+    align-content: center;
+    
+    border-radius: 0.125em;
+    border-inline-start-width: 0.25em;
+    padding: 0.125em 0.375em;
+  
+    &:has(:checked) {
+      color: white;
+      background-color: var(--fill-color);
+      border-color: var(--line-color);
+    }
+    
+    &.dark {
+      --line-color: hsl(from var(--fill-color) h s calc(l + 20));
+      --def-color:  hsl(from var(--fill-color) h s calc(l + 20));
+    }
+  
+    input[type=checkbox] {display: none;}
+  }
+  /* ---------------------- */
+  
+  
+  /* ---------------------- */
+  /*      toggle-button     */
+  .toggle-button {
+    --radius: 1rem;
+    --padding: 2px;
+    --color: seagreen;
+    gap: calc(0.5*var(--radius));
+    font-size: calc(2*var(--radius));
+    
+    --transition-time: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    cursor: pointer;
+  
+    input[type=checkbox] {display: none;}
+  
+    .slider {
+      position: relative;
+      aspect-ratio: 2 / 1;
+      height: calc(2*(var(--radius) + var(--padding)));
+      border-radius: calc(var(--radius) + var(--padding));
+  
+      transition: background-color var(--transition-time);
+      background-color: #d9d9d9;
+      :checked ~ & {background-color: var(--color);}
+    }
+    .slider::before {
+      content: '';
+      aspect-ratio: 1 / 1;
+      height: calc(2*var(--radius));
+      border-radius: 50%;
+      background-color: white;
+  
+      position: absolute;
+      top: var(--padding);
+      left: var(--padding);
+  
+      transition: left var(--transition-time);
+    }
+    :checked ~ .slider::before {
+      left: calc(3*var(--padding) + 2*var(--radius));
+    }
+  }
+  /* ---------------------- */
+  
+  
+  /* ---------------------- */
+  /*      multi-select      */
+  .multi-select {
+    height: 1.5em;
+    --transition-time: 0.2s;
+    --anchor-name: --multiselect;
+  
+    position: relative;
+    white-space: nowrap;
+    
+    /* セレクト部分 */
+    > :first-child {
+      anchor-name: var(--anchor-name);
+  
+      background-color: #fff;
+      border: 1px solid #aaa;
+      border-radius: 0.25em;
+      font-family: unset;
+      font-size: unset;
+  
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.25em;
+      
+      padding: 0 0.5em;
+      height: stretch;
+      width: stretch;
+      cursor: pointer;
+      
+      > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      > .arrow {
+        flex-shrink: 0;
+        background-color: #999;
+        width: 1ch;
+        aspect-ratio: 3/2;
+        clip-path: polygon(0 100%, 50% 0, 100% 100%);
+        transition: rotate var(--transition-time);
+      }
+    }
+    
+    &:has(.multi-picker:not(:popover-open)) .arrow {rotate: 180deg;}
+  }
+  
+  
+  /* ドロップダウンメニュー */
+  .multi-picker {
+    background: white;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
+    
+    margin: 0;
+    padding: 0.25em 0.5em;
+    line-height: 1.5em;
+    max-height: 50vh;
+    min-width: anchor-size(width);
+    box-sizing: border-box;
+    
+    overflow: hidden auto;
+    scrollbar-color: #ccc transparent;
+    scrollbar-width: thin;
+    
+    position: absolute;
+    position-anchor: var(--anchor-name);
+    position-area: bottom span-right;
+    position-try-fallbacks: flip-block;
+    
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.2em;
+    }
+    input[type=checkbox] {margin: 0;}
+  }
+  /* ---------------------- */
+  
+  
+  /* ---------------------- */
+  /*        mini card       */
+  .mini-card {
+    --main-color: gray;
+    --radius: 5px;
+    --line-width: 1px;
+    
+    border: var(--line-width) solid var(--main-color);
+    border-radius: var(--radius);
+    
+    display: flex;
+    text-align: center;
+    white-space: nowrap;
+    min-width: fit-content;
+  
+    > * {
+      padding-block: 0.25rem;
+      padding-inline: 0.5rem;
+      align-content: center;
+      flex: 1;
+    }
+  
+    > :first-child {
+      color: white;
+      background-color: var(--main-color);
+      border-radius: calc(var(--radius) - var(--line-width)) 0 0 calc(var(--radius) - var(--line-width));
+      border-inline-end: var(--line-width) solid var(--main-color);
+    }
+  }
+  /* ---------------------- */
+}
