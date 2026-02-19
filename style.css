@@ -1,4 +1,11 @@
 @layer default {
+  label {cursor: pointer;}
+  input[type=checkbox] {cursor: pointer;}
+  button {cursor: pointer;}
+}
+
+
+@layer default {
   /* ---------------------- */
   /*          basic         */
   label:has(:checked)   .not-checked {display: none;}
