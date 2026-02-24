@@ -133,8 +133,8 @@
   
     .slider {
       position: relative;
-      aspect-ratio: 2 / 1;
-      height: calc(2*(var(--radius) + var(--padding)));
+      width:  calc(4*var(--radius) + 2*var(--padding));
+      height: calc(2*var(--radius) + 2*var(--padding));
       border-radius: calc(var(--radius) + var(--padding));
   
       transition: background-color var(--transition-time);
@@ -155,7 +155,7 @@
       transition: left var(--transition-time);
     }
     :checked ~ .slider::before {
-      left: calc(3*var(--padding) + 2*var(--radius));
+      left: calc(2*var(--radius) + var(--padding));
     }
   }
   /* ---------------------- */
