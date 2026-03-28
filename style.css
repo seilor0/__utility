@@ -1,11 +1,12 @@
-@layer default {
+@layer base, component, state;
+
+@layer base {
   label {cursor: pointer;}
   input[type=checkbox] {cursor: pointer;}
   button {cursor: pointer;}
 }
 
-
-@layer default {
+@layer base {
   /* ---------------------- */
   /*          basic         */
   label:has(:checked)   .not-checked {display: none;}
